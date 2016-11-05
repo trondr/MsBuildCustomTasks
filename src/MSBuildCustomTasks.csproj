@@ -66,6 +66,8 @@
     <Compile Include="Common\Impersonator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunAsUser.cs" />
+    <Compile Include="SignResult.cs" />
+    <Compile Include="SignTool.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
