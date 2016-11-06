@@ -15,14 +15,33 @@ namespace MSBuildCustomTasks
     {
         public override bool Execute()
         {
+            var pfxFileExists = File.Exists(PfxFile);
+            if (!pfxFileExists)
+            {
+                LogError("Pfx file does not exist. Skipping signing.", ContinueBuildOnFailure);
+                return ContinueBuildOnFailure;
+            }
+
             if (!FindSignToolExe())
             {
-                Log.LogError("Could not find signtool.exe");
-                return false;
+                LogError("Could not find signtool.exe", ContinueBuildOnFailure);
+                return ContinueBuildOnFailure;
             }
 
             var timeStampServers = TimeStampServer.Select(item => item.ItemSpec).ToList();
+            if (timeStampServers.Count == 0)
+            {
+                LogError("Time stamp servers has not been specified.", ContinueBuildOnFailure);
+                return ContinueBuildOnFailure;
+            }
+
             var signFiles = SignFiles.Select(item => item.ItemSpec).ToList();
+            if (signFiles.Count == 0)
+            {
+                LogError("Number of files to sign is zero.", ContinueBuildOnFailure);
+                return ContinueBuildOnFailure;
+            }
+
             Log.LogMessage("Number of files to sign: " + signFiles.Count);
             var pfxPassword = GetPfxPassword(PfxPassword, PfxPasswordEncryptionKey);
             var signResult = SignResult.Success;
@@ -32,7 +51,7 @@ namespace MSBuildCustomTasks
                 if (signResult != SignResult.TimeServerError)
                     break;
             }
-            return signResult == SignResult.Success;
+            return ContinueBuildOnFailure || (signResult == SignResult.Success);
         }
 
         private SignResult ExecuteSignTool(IEnumerable<string> signFiles, string pfxFile, string pfxPassword, string description, string timestampServer)
@@ -96,6 +115,18 @@ namespace MSBuildCustomTasks
             }
         }
 
+        private void LogError(string message, bool continueBuildOnFailure)
+        {
+            if (continueBuildOnFailure)
+            {
+                Log.LogWarning(message);
+            }
+            else
+            {
+                Log.LogError(message);
+            }
+        }
+
         private void LogCensoredMessage(string message, string pfxPassword)
         {
             var censored = new String('*', pfxPassword.Length);
@@ -105,7 +136,7 @@ namespace MSBuildCustomTasks
         private void LogCensoredError(string message, string pfxPassword)
         {
             var censored = new String('*', PfxPassword.Length);
-            Log.LogError(message.Replace(PfxPassword, censored));
+            LogError(message.Replace(PfxPassword, censored), ContinueBuildOnFailure);
         }
 
         private bool FindSignToolExe()
@@ -146,7 +177,7 @@ namespace MSBuildCustomTasks
             value = Regex.Replace(value, @"^(.*\s.*?)(\\*)$", "\"$1$2$2\"");
             return value;
         }
-        
+
         private string GetPfxPassword(string pfxPassword, string pfxPasswordEncryptionKey)
         {
             if (string.IsNullOrEmpty(pfxPasswordEncryptionKey))
@@ -163,7 +194,7 @@ namespace MSBuildCustomTasks
 
         [Required]
         public string PfxPassword { get; set; }
-        
+
         public string PfxPasswordEncryptionKey { get; set; }
 
         [Required]
@@ -174,6 +205,7 @@ namespace MSBuildCustomTasks
         [Required]
         public ITaskItem[] SignFiles { get; set; }
 
-
+        [Required]
+        public bool ContinueBuildOnFailure { get; set; }
     }
 }
