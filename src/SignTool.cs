@@ -98,6 +98,7 @@ namespace MSBuildCustomTasks
                     else nullReceived = true;
                 };
                 process.StartInfo = startInfo;
+                process.EnableRaisingEvents = true;
                 process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();

@@ -60,6 +60,9 @@
     <Compile Include="Common\IMsiFileInfo.cs" />
     <Compile Include="Common\IniFileOperation.cs" />
     <Compile Include="Common\MsiFileOperation.cs" />
+    <Compile Include="Common\ProcessOperation.cs" />
+    <Compile Include="CreateSccmApplication.cs" />
+    <Compile Include="Common\RegistryOperation.cs" />
     <Compile Include="ResolveScriptInstallPackage.cs" />
     <Compile Include="Common\SecurityHelper.cs" />
     <Compile Include="Impersonate.cs" />
