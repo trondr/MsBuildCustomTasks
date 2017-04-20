@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.Build.Utilities;
 
 namespace MSBuildCustomTasks.Common
@@ -9,8 +7,7 @@ namespace MSBuildCustomTasks.Common
     {
         public static int StartProcess(string exePath, string arguments, DataReceivedEventHandler onOut, DataReceivedEventHandler onError, TaskLoggingHelper log)
         {
-            var taskCompletionSource = new TaskCompletionSource<int>();
-
+        
             using (var process = new Process())
             {
                 var startInfo = new ProcessStartInfo(exePath, arguments)
@@ -25,8 +22,7 @@ namespace MSBuildCustomTasks.Common
                 process.OutputDataReceived += onOut;
                 process.Exited += (sender, args) =>
                 {
-                    var proc = (Process) sender;
-                    taskCompletionSource.SetResult(proc.ExitCode);
+                    var proc = (Process) sender;                   
                     log.LogMessage($"Exiting process: \"{exePath}\" {arguments}. Exitcode: {proc.ExitCode}");
                 };                
                 process.StartInfo = startInfo;
@@ -34,8 +30,8 @@ namespace MSBuildCustomTasks.Common
                 process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
-                taskCompletionSource.Task.Wait();
-                return taskCompletionSource.Task.Result;
+                process.WaitForExit();
+                return process.ExitCode;
             }
         }
     }
