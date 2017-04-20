@@ -27,6 +27,7 @@ namespace MSBuildCustomTasks
             iniFileOperation.Write(PackageDefinitionSms, "Package Definition", "Name", PackageDefinitionName);
             iniFileOperation.Write(PackageDefinitionSms, "Package Definition", "Version", PackageDefinitionVersion);
             iniFileOperation.Write(PackageDefinitionSms, "Package Definition", "Publisher", PackageDefinitionPublisher);
+            iniFileOperation.Write(PackageDefinitionSms, "Package Definition", "Comment", PackageDefinitionComment);
             iniFileOperation.Write(PackageDefinitionSms, "INSTALL", "CommandLine", PackageDefinitionInstallCommandLine);            
             iniFileOperation.Write(PackageDefinitionSms, "UNINSTALL", "CommandLine", PackageDefinitionUnInstallCommandLine);
             var msiFileOperation = new MsiFileOperation();
@@ -46,7 +47,6 @@ namespace MSBuildCustomTasks
         [Required]
         public string TargetMsiFile { get; set; }
        
-
         [Required]
         public string VendorInstallIni { get; set; }
 
@@ -68,5 +68,7 @@ namespace MSBuildCustomTasks
         [Required]
         public string PackageDefinitionUnInstallCommandLine { get; set; }
 
+        [Required]
+        public string PackageDefinitionComment { get; set; }
     }
 }
