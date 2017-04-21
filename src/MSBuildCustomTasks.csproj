@@ -31,8 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="INIFileParser, Version=2.3.0.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
-      <HintPath>..\..\NuGetPackages\ini-parser.2.3.0\lib\net20\INIFileParser.dll</HintPath>
+    <Reference Include="INIFileParser, Version=2.4.0.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <HintPath>..\..\NuGetPackages\ini-parser.2.4.0\lib\net20\INIFileParser.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
@@ -81,6 +81,9 @@
     <PostBuildEvent>copy "$(TargetDir)$(TargetName).dll" "$(ProjectDir)..\$(TargetName).dll"
 copy "$(TargetDir)$(TargetName).pdb" "$(ProjectDir)..\$(TargetName).pdb"
 copy "$(TargetDir)Microsoft.Deployment.WindowsInstaller.dll" "$(ProjectDir)..\Microsoft.Deployment.WindowsInstaller.dll"
+copy "$(TargetDir)Microsoft.Deployment.WindowsInstaller.Package.dll" "$(ProjectDir)..\Microsoft.Deployment.WindowsInstaller.Package.dll"
+copy "$(TargetDir)Microsoft.Deployment.Compression.dll" "$(ProjectDir)..\Microsoft.Deployment.Compression.dll"
+copy "$(TargetDir)INIFileParser.dll" "$(ProjectDir)..\INIFileParser.dll"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
